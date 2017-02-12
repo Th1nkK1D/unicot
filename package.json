@@ -1,0 +1,14 @@
+{
+  "name": "unicot",
+  "version": "1.0.0",
+  "description": "Stream music from iTune to Discord",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Th1nkK1D",
+  "license": "Th1nkK1D",
+  "dependencies": {
+    "playback": "git+https://github.com/Th1nkK1D/playback.git"
+  }
+}
