@@ -9,6 +9,7 @@
   "author": "Th1nkK1D",
   "license": "Th1nkK1D",
   "dependencies": {
+    "discord.io": "^2.4.2",
     "playback": "git+https://github.com/Th1nkK1D/playback.git"
   }
 }
