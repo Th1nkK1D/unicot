@@ -1,5 +1,7 @@
+let fs = require('fs');
 let itunes = require('playback');
 let Discord = require('discord.io');
+
 let bot = new Discord.Client({
     autorun: true,
     token: "MjgwMzY4NzI2NTk0MDI3NTIw.C4IZjQ.Rtq9cQ-W0rD10GQhTc_QZ5HP5zA"
@@ -50,15 +52,34 @@ bot.on('message', function(user, userID, channelID, message, event) {
 
 //iTune playing event
 itunes.on('playing', function(data) {
-    if(textChannel != null) {
+    if(voiceChannel != null) {
         //Get music path
         let path = data.location.slice(data.location.indexOf(':'),data.location.length).replace(/:/g,"/");
-        bot.sendMessage({
-            to: textChannel,
-            message: path
-        });
 
-        console.log(data);
+        if (fs.existsSync(path)) {
+            console.log('FOUND');
+        }
+        
+        //Let's join the voice channel, the ID is whatever your voice channel's ID is.
+        bot.joinVoiceChannel(voiceChannel, function(error, events) {
+            //Check to see if any errors happen while joining.
+            if (error) return console.error(error);
+
+            //Then get the audio context
+            bot.getAudioContext(voiceChannel, function(error, stream) {
+                //Once again, check to see if any errors exist
+                if (error) return console.error(error);
+
+                //Create a stream to your file and pipe it to the stream
+                //Without {end: false}, it would close up the stream, so make sure to include that.
+                fs.createReadStream(path).pipe(stream, {end: false});
+
+                //The stream fires `done` when it's got nothing else to send to Discord.
+                stream.on('done', function() {
+                //Handle
+                });
+            });
+        });
     }
 });
 itunes.on('paused', function(data){ console.log('paused');} );
