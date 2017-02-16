@@ -29,9 +29,33 @@ bot.on('ready', function(event) {
 bot.on('message', function(user, userID, channelID, message, event) {
     if (message === ">>wakeup") {
         textChannel = channelID;
+        let path = 'zenzenzense.mp3';
+        if (fs.existsSync(path)) {
+            console.log('FOUND');
+        }
 
         //Join voice channel
-        bot.joinVoiceChannel(voiceChannel);
+        bot.joinVoiceChannel(voiceChannel, function(error, events) {
+            //Check to see if any errors happen while joining.
+            if (error) return console.error(error);
+
+            bot.getAudioContext(voiceChannel, function(error, stream) {
+                //Once again, check to see if any errors exist
+                if (error) return console.error(error);
+
+                //Create a stream to your file and pipe it to the stream
+                //Without {end: false}, it would close up the stream, so make sure to include that.
+                fs.createReadStream(path).pipe(stream, {end: false});
+
+                //The stream fires `done` when it's got nothing else to send to Discord.
+                stream.on('done', function() {
+                //Handle
+                console.log("DONE");
+                });
+            });
+
+        });
+
         joinStatus = true;
 
         bot.sendMessage({
@@ -59,12 +83,6 @@ itunes.on('playing', function(data) {
         if (fs.existsSync(path)) {
             console.log('FOUND');
         }
-        
-        //Let's join the voice channel, the ID is whatever your voice channel's ID is.
-        bot.joinVoiceChannel(voiceChannel, function(error, events) {
-            //Check to see if any errors happen while joining.
-            if (error) return console.error(error);
-
             //Then get the audio context
             bot.getAudioContext(voiceChannel, function(error, stream) {
                 //Once again, check to see if any errors exist
@@ -72,14 +90,15 @@ itunes.on('playing', function(data) {
 
                 //Create a stream to your file and pipe it to the stream
                 //Without {end: false}, it would close up the stream, so make sure to include that.
-                fs.createReadStream(path).pipe(stream, {end: false});
+                fs.createReadStream('./').pipe(stream);
 
                 //The stream fires `done` when it's got nothing else to send to Discord.
                 stream.on('done', function() {
                 //Handle
+                console.log("DONE");
                 });
             });
-        });
     }
 });
+
 itunes.on('paused', function(data){ console.log('paused');} );
