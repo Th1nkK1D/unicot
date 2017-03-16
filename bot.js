@@ -1,6 +1,5 @@
-let fs = require('fs');
-let itunes = require('playback');
 let Discord = require('discord.io');
+let youtubeStream = require('youtube-audio-stream')
 
 let bot = new Discord.Client({
     autorun: true,
@@ -9,7 +8,6 @@ let bot = new Discord.Client({
 
 let voiceChannel = null;
 let textChannel = null;
-let joinStatus = false;
 
 bot.on('ready', function(event) {
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
@@ -25,44 +23,43 @@ bot.on('ready', function(event) {
     }
 });
 
-
 bot.on('message', function(user, userID, channelID, message, event) {
-    if (message === ">>wakeup") {
+    if (message === ">>hi") {
         textChannel = channelID;
-        let path = 'zenzenzense.mp3';
-        if (fs.existsSync(path)) {
-            console.log('FOUND');
-        }
 
-        //Join voice channel
+        //Let's join the voice channel, the ID is whatever your voice channel's ID is.
         bot.joinVoiceChannel(voiceChannel, function(error, events) {
             //Check to see if any errors happen while joining.
             if (error) return console.error(error);
 
+            //Then get the audio context
             bot.getAudioContext(voiceChannel, function(error, stream) {
                 //Once again, check to see if any errors exist
                 if (error) return console.error(error);
 
                 //Create a stream to your file and pipe it to the stream
                 //Without {end: false}, it would close up the stream, so make sure to include that.
-                fs.createReadStream(path).pipe(stream, {end: false});
+                var requestUrl = 'https://www.youtube.com/watch?v=WXmTEyq5nXc';
+
+                try {
+                    youtubeStream(requestUrl).pipe(stream,{end: false});
+                } catch (exception) {
+                    console.log(exception);
+                }
 
                 //The stream fires `done` when it's got nothing else to send to Discord.
                 stream.on('done', function() {
                 //Handle
-                console.log("DONE");
+                console.log("Done");
                 });
             });
-
         });
-
-        joinStatus = true;
 
         bot.sendMessage({
             to: channelID,
             message: "Yo, What's up?"
         });
-    } else if(message === ">>sleep") {
+    } else if(message === ">>bye") {
         bot.sendMessage({
             to: channelID,
             message: "Bye, dude"
@@ -73,32 +70,3 @@ bot.on('message', function(user, userID, channelID, message, event) {
         bot.leaveVoiceChannel(voiceChannel);
     }
 });
-
-//iTune playing event
-itunes.on('playing', function(data) {
-    if(voiceChannel != null) {
-        //Get music path
-        let path = data.location.slice(data.location.indexOf(':'),data.location.length).replace(/:/g,"/");
-
-        if (fs.existsSync(path)) {
-            console.log('FOUND');
-        }
-            //Then get the audio context
-            bot.getAudioContext(voiceChannel, function(error, stream) {
-                //Once again, check to see if any errors exist
-                if (error) return console.error(error);
-
-                //Create a stream to your file and pipe it to the stream
-                //Without {end: false}, it would close up the stream, so make sure to include that.
-                fs.createReadStream('./').pipe(stream);
-
-                //The stream fires `done` when it's got nothing else to send to Discord.
-                stream.on('done', function() {
-                //Handle
-                console.log("DONE");
-                });
-            });
-    }
-});
-
-itunes.on('paused', function(data){ console.log('paused');} );
