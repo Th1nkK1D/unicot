@@ -1,7 +1,7 @@
 {
   "name": "unicot",
   "version": "1.0.0",
-  "description": "Stream music from iTune to Discord",
+  "description": "Discord music streamer bot",
   "main": "bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,7 +9,8 @@
   "author": "Th1nkK1D",
   "license": "Th1nkK1D",
   "dependencies": {
-    "discord.io": "^2.4.2",
+    "discord.js": "^11.0.0",
+    "node-opus": "^0.2.4",
     "youtube-audio-stream": "0.0.38"
   }
 }
