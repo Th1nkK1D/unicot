@@ -1,0 +1,17 @@
+<body ng-app="unicot">
+    <div ng-controller="mainController">
+        <h2>Unicot bot hello!</h2>
+        {{test}}
+
+        <div>
+            <div ng-repeat="song in queue">
+                <p>{{song.name}}</p>
+            </div>
+        </div>
+
+        <input type="text">
+        <button>Added!</button>
+        <button>Play</button>
+        <button>Pause</button>
+    </div>
+</body>
