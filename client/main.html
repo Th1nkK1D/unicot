@@ -5,13 +5,14 @@
 
         <div>
             <div ng-repeat="song in queue">
-                <p>{{song}}</p>
+                <p>{{song.url}}</p>
             </div>
         </div>
 
         <input type="text" ng-model="inputUrl">
-        <button ng-click="add(inputUrl)">Added!</button>
-        <button>Play</button>
-        <button>Pause</button>
+        <button ng-click="add(inputUrl)">Add </button>
+        <button ng-click="play()">Play</button>
+        <button ng-click="pause()">Pause</button>
+        <button ng-click="skip()">Skip</button>
     </div>
 </body>
