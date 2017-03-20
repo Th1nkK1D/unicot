@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Queue } from './queue.js';
+import { Queue } from '../imports/queue.js';
 
 if(Meteor.isServer) {
     const Discord = require('discord.js');
@@ -42,47 +42,6 @@ if(Meteor.isServer) {
         }
 
     });
-
-    //Enqueue function
-    enqueue = function() {
-        let currentSong = Queue.findOne({});
-
-        //stream song
-        let stream = ytdl(currentSong.url, {filter : 'audioonly'});
-        dispatcher = voiceConnection.playStream(stream,streamSetting);
-
-        dispatcher.on('end',function(){
-            dispatcher = null;
-            console.log('END');
-            enqueue();
-        });
-    }
-
-    // Meteor Methods called from front-end
-    Meteor.methods({
-        'add': function(url) {
-            Queue.insert({
-                "url": url,
-                "date": new Date()
-            });
-        },
-        'play': function() {
-            if(dispatcher == null) {
-                //No song playing
-                enqueue();
-            } else {
-                //Song is paused
-                dispatcher.resume();
-            }
-        },
-        'skip': function() {
-            dispatcher.end();
-            enqueue();
-        },
-        'pause': function() {
-            dispatcher.pause();
-        }
-    })
 
     client.login(token);
 }

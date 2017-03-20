@@ -7,8 +7,6 @@ import { Queue } from '../imports/queue.js';
 angular.module('unicot', [
   angularMeteor
 ]).controller('mainController',['$scope','$http',function($scope,$http) {
-    $scope.test = 'Hi there!';
-
     /* Add song */
     $scope.add = function(url) {
       /*
@@ -37,6 +35,6 @@ angular.module('unicot', [
     $scope.helpers({
       queue() {
         return Queue.find({});
-      }
+      },
     })
 }]);
