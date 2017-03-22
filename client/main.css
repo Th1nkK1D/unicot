@@ -1,0 +1,111 @@
+body {
+    background-color: #86E2D5;
+}
+
+.main-body {
+    margin: 10px auto;
+    width: 100%;
+    max-width: 80rem;
+    text-align: center;
+}
+
+.banner {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    margin: 10px;
+}
+
+.paper {
+    background-color: white;
+    text-align: left;
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.5);
+}
+
+.player {
+    position: relative;
+    overflow: hidden;
+}
+
+.player:before{
+	content: "";
+	display: block;
+	padding-top: 100%; 	/* initial ratio of 1:1*/
+}
+
+.cover {
+    position: absolute;
+    margin: auto; 
+    height: 100%;
+    width: 100%;
+
+    /* For the following settings we set 100%, but it can be higher if needed 
+    See the answer's update */
+    left: -100%;
+    right: -100%;
+    top: -100%;
+    bottom: -100%;
+    z-index: 1;
+}
+
+.controller {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0.5;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center; /* align vertical */
+    z-index: 2;
+}
+
+.controller i {
+    font-size: 6em;
+}
+
+.controller a {
+    color: white;
+    opacity: 0.7;
+}
+
+.controller a:hover {
+    opacity: 1;
+}
+
+.footer {
+    font-size: 12px;
+    color: #C5EFE8;
+    margin: 20px;
+}
+
+.footer a {
+    color: #C5EFE8;
+    text-decoration: none;
+}
+
+.queue {
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.playing {
+    margin: 10px 0;
+}
+
+.input {
+    width: 100%;
+    background-color: white;
+    position: absolute;
+    padding: 0 5px;
+    bottom: 0;
+    left: 0;
+}
+
+.input form {
+    margin: 0;
+}

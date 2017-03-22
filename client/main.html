@@ -1,17 +1,49 @@
+<head>
+    <title>Unicot: Discord Music Streaming Bot</title>
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- CSS Reset -->
+    <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+    <!-- Milligram CSS minified -->
+    <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+</head>
+
 <body ng-app="unicot">
-    <div ng-controller="mainController">
-        <h2>Unicot bot hello!</h2>
-
-        <div>
-            <div ng-repeat="song in queue">
-                <p>{{song.url}}</p>
+    <div class="container" ng-controller="mainController">
+        <div class="main-body">
+            <img src="unicot_banner.jpg" alt="Unicot" class="banner">
+            <div class="row paper">
+                <div class="column player">
+                    <div class="controller">
+                        <a href="" ng-click="play()" ng-show="true"><i class="material-icons">play_arrow</i></a>
+                        <a href="" ng-click="pause()" ng-hide="true"><i class="material-icons">pause</i></a>
+                    </div>
+                    <img class="cover" src="https://img.youtube.com/vi/{{queue.playing.vid}}/hqdefault.jpg" alt="">
+                </div>
+                <div class="column">
+                    <div class="queue">
+                        <div class="playing">
+                            <h4>{{queue.playing.title}}</h4>
+                        </div>
+                        <div class="next-list">
+                            <ol>
+                                <li ng-repeat="song in queue.nextList">
+                                    {{song.title}}
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="input">
+                            <form ng-submit="add(url)">
+                                <input type="text" placeholder="Paste Youtube link here..." ng-model="url">
+                                <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <p class="footer">&copy Th1nkK1D 2017 - <a href="https://github.com/Th1nkK1D/unicot ">Unicot Github Page</a></p>
         </div>
-
-        <input type="text" ng-model="inputUrl">
-        <button ng-click="add(inputUrl)">Add </button>
-        <button ng-click="play()">Play</button>
-        <button ng-click="pause()">Pause</button>
-        <button ng-click="skip()">Skip</button>
     </div>
 </body>

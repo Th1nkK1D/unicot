@@ -82,9 +82,11 @@ if(Meteor.isServer) {
 
        // Meteor Methods called from front-end
     Meteor.methods({
-        'add': function(url) {
+        'add': function(vid,title) {
             Queue.insert({
-                "url": url,
+                "vid": vid,
+                "title": title,
+                "status": "queued",
                 "date": new Date()
             });
 
