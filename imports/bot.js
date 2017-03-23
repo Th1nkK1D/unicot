@@ -4,6 +4,7 @@ import { Queue } from '../imports/queue';
 if(Meteor.isServer) {
     const Discord = require('discord.js');
     const ytdl = require('ytdl-core');
+    var localtunnel = require('localtunnel');
 
     const token = 'MjgwMzY4NzI2NTk0MDI3NTIw.C6wpWw.f-ruHdcIvvv-5STgBUNb4AOvjwo';
     const client = new Discord.Client();
@@ -13,6 +14,7 @@ if(Meteor.isServer) {
     voiceChannel = null;
     voiceConnection = null;
     dispatcher = null;
+    tunnel = null;
 
     // Discord bot preparation
     client.on('ready', () => {
@@ -29,6 +31,22 @@ if(Meteor.isServer) {
                 voiceChannel.join()
                     .then(connection => {
                         voiceConnection = connection;
+
+                        //Create localtunnel
+                        tunnel = localtunnel(3000, function(err, tunnel) {
+                            if (err) {
+                                console.log("localtunnel error");
+                            }
+
+                            console.log("localtunnel working: "+tunnel.url);
+
+                            m.reply("I'm here! : "+tunnel.url);
+                        });
+
+                        tunnel.on('close', function() {
+                            // tunnels are closed
+                            console.log("localtunnel closed");
+                        });
                     })
                     .catch(console.error);
             }
@@ -42,6 +60,9 @@ if(Meteor.isServer) {
                 //Leave voiceChannel
                 voiceChannel.leave();
                 voiceChannel = null;
+
+                //Close localtunnel
+                tunnel.close();
             }
         }
 
