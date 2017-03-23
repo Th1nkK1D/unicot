@@ -37,6 +37,8 @@ angular.module('unicot', [
 
     $scope.helpers({
       queue() {
+        Meteor.subscribe('queue');
+
         let queue = Queue.find({}).fetch();
 
         if(typeof queue != 'undefined' && queue.length > 0) {

@@ -34,6 +34,11 @@ if(Meteor.isServer) {
             }
         } else if(m.content === '>>bye') {
             if(voiceChannel != null) {
+
+                if(dispatcher != null) {
+                    dispatcher.end();
+                }
+
                 //Leave voiceChannel
                 voiceChannel.leave();
                 voiceChannel = null;
@@ -49,7 +54,7 @@ if(Meteor.isServer) {
         console.log("getNextSong started");
         currentSong = Queue.findOne({});
         //let currentSong = {"url":"https://www.youtube.com/watch?v=tPEE9ZwTmy0"};
-        console.log("Got next song: "+currentSong.url);
+        console.log("Got next song: "+currentSong.vid);
 
         if(typeof currentSong != 'undefined') {
             //Play Stream
@@ -61,10 +66,10 @@ if(Meteor.isServer) {
     function playStream(currentSong) {
         if(dispatcher == null) {
             //stream song
-            let stream = ytdl(currentSong.url, {filter : 'audioonly'});
+            let stream = ytdl('https://www.youtube.com/watch?v='+currentSong.vid, {filter : 'audioonly'});
             dispatcher = voiceConnection.playStream(stream,streamSetting);
 
-            console.log("playing "+currentSong.url);
+            console.log("playing "+currentSong.vid);
 
             dispatcher.on('end',function(currentSong) {
                 if(dispatcher != null) {
@@ -89,8 +94,6 @@ if(Meteor.isServer) {
                 "status": "queued",
                 "date": new Date()
             });
-
-            playQueue.push({})
         },
         'play': function() {
             if(voiceConnection != null) {
