@@ -38,9 +38,6 @@ body {
     margin: auto; 
     height: 100%;
     width: 100%;
-
-    /* For the following settings we set 100%, but it can be higher if needed 
-    See the answer's update */
     left: -100%;
     right: -100%;
     top: -100%;
@@ -57,8 +54,9 @@ body {
     left: 0;
     top: 0;
     display: flex;
-    justify-content: center; /* align horizontal */
-    align-items: center; /* align vertical */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     z-index: 2;
 }
 
@@ -69,6 +67,10 @@ body {
 .controller a {
     color: white;
     opacity: 0.7;
+}
+
+.controller .volume i {
+    font-size: 2em;
 }
 
 .controller a:hover {
@@ -108,4 +110,11 @@ body {
 
 .input form {
     margin: 0;
+}
+
+.input form .submit {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
 }

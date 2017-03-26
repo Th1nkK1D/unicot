@@ -35,6 +35,22 @@ angular.module('unicot', [
       Meteor.call('skip');
     }
 
+    $scope.stop = function() {
+      Meteor.call('stop');
+    }
+
+    $scope.volumeDown = function() {
+      Meteor.call('volumeDown');
+    }
+
+    $scope.VolumeUp = function() {
+      Meteor.call('VolumeUp');
+    }
+
+    $scope.remove = function(song) {
+      Meteor.call('remove',song._id);
+    }
+
     $scope.helpers({
       queue() {
         Meteor.subscribe('queue');
