@@ -4,13 +4,13 @@ import { Queue } from '../imports/queue';
 if(Meteor.isServer) {
     const Discord = require('discord.js');
     const ytdl = require('ytdl-core');
-    //let localtunnel = require('localtunnel');
+    let localtunnel = require('localtunnel');
     let Fiber = Npm.require('fibers');
 
     const token = 'MjgwMzY4NzI2NTk0MDI3NTIw.C6wpWw.f-ruHdcIvvv-5STgBUNb4AOvjwo';
     const client = new Discord.Client();
 
-    let streamSetting = { seek: 0, volume: 0.08 };
+    let streamSetting = { seek: 0, volume: 0.05 };
 
     voiceChannel = null;
     voiceConnection = null;
@@ -147,7 +147,7 @@ if(Meteor.isServer) {
                 dispatcher.pause();
 
                 let currentSong = Queue.findOne({});
-                Queue.update({currentSong},{$set:{"status": "pause"}});
+                Queue.update(currentSong,{$set:{"status": "pause"}});
             }
         },
         'stop': function() {
