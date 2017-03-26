@@ -4,7 +4,8 @@ import { Queue } from '../imports/queue';
 if(Meteor.isServer) {
     const Discord = require('discord.js');
     const ytdl = require('ytdl-core');
-    var localtunnel = require('localtunnel');
+    //let localtunnel = require('localtunnel');
+    let Fiber = Npm.require('fibers');
 
     const token = 'MjgwMzY4NzI2NTk0MDI3NTIw.C6wpWw.f-ruHdcIvvv-5STgBUNb4AOvjwo';
     const client = new Discord.Client();
@@ -33,6 +34,7 @@ if(Meteor.isServer) {
                         voiceConnection = connection;
 
                         //Create localtunnel
+                        /*
                         tunnel = localtunnel(3000, function(err, tunnel) {
                             if (err) {
                                 console.log("localtunnel error");
@@ -47,6 +49,7 @@ if(Meteor.isServer) {
                             // tunnels are closed
                             console.log("localtunnel closed");
                         });
+                        */
                     })
                     .catch(console.error);
             }
@@ -62,7 +65,7 @@ if(Meteor.isServer) {
                 voiceChannel = null;
 
                 //Close localtunnel
-                tunnel.close();
+                //tunnel.close();
             }
         }
 
@@ -70,39 +73,26 @@ if(Meteor.isServer) {
 
     client.login(token);
 
-    //Dequeue Song
-    function getNextSong() {
-        console.log("getNextSong started");
-        currentSong = Queue.findOne({});
-        //let currentSong = {"url":"https://www.youtube.com/watch?v=tPEE9ZwTmy0"};
-        console.log("Got next song: "+currentSong.vid);
-
-        if(typeof currentSong != 'undefined') {
-            //Play Stream
-            playStream(currentSong);
-        }
-    }
-
     //Play Stream
-    function playStream(currentSong) {
+    function playStream(vid) {
         if(dispatcher == null) {
+            let fiber = Fiber.current;
+
             //stream song
-            let stream = ytdl('https://www.youtube.com/watch?v='+currentSong.vid, {filter : 'audioonly'});
+            let stream = ytdl('https://www.youtube.com/watch?v='+vid, {filter : 'audioonly'});
             dispatcher = voiceConnection.playStream(stream,streamSetting);
 
-            console.log("playing "+currentSong.vid);
+            console.log("playing "+vid);
 
             dispatcher.on('end',function(currentSong) {
                 if(dispatcher != null) {
                     console.log("Stream ended");
-                    //Remove from queue
-                    //currentSong = Queue.remove(currentSong);
-                    console.log("Song removed");
-
-                    dispatcher = null;
-                    getNextSong();
+    
+                    fiber.run();
                 }
-            })
+            });
+
+            return Fiber.yield();            
         }
     }
 
@@ -120,7 +110,21 @@ if(Meteor.isServer) {
             if(voiceConnection != null) {
                 if(dispatcher == null) {
                     //No song playing
-                    getNextSong();
+                    let currentSong = Queue.findOne({});
+
+                    while(typeof currentSong != 'undefined' && currentSong != null) {
+                        Queue.update(currentSong,{$set:{"status":"playing"}});
+
+                        playStream(currentSong.vid);
+
+                        //Remove from queue
+                        dispatcher = null;
+                        Queue.remove({"_id": currentSong._id});
+                        console.log("Song removed");
+
+                        currentSong = Queue.findOne({});
+                    }
+
                 } else {
                     //Song is paused
                     dispatcher.resume();
