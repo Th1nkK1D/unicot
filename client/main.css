@@ -99,6 +99,12 @@ body {
     margin: 10px 0;
 }
 
+.next-list {
+    margin-bottom: 40px;
+    overflow: auto;
+    max-height: 250px;
+}
+
 .input {
     width: 100%;
     background-color: white;

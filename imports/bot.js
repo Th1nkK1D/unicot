@@ -19,7 +19,7 @@ if(Meteor.isServer) {
 
     // Discord bot preparation
     client.on('ready', () => {
-    console.log('Unicot is running!');
+        console.log('Unicot is running!');
     });
 
     client.on('message', m => {
@@ -71,6 +71,13 @@ if(Meteor.isServer) {
 
     client.login(token);
 
+    // Reset currentSong playing status  
+    let currentSong = Queue.findOne({});
+
+    if(currentSong.status != "queued") {
+        Queue.update({"_id":currentSong._id},{$set:{"status": "queued"}})
+    }
+
     //Playing start
     function playing() {
         let currentSong = Queue.findOne({});
@@ -102,8 +109,7 @@ if(Meteor.isServer) {
 
             dispatcher.on('end',function(currentSong) {
                 if(dispatcher != null) {
-                    console.log("Stream ended");
-    
+                    //console.log("Stream ended");
                     fiber.run();
                 }
             });
@@ -132,7 +138,9 @@ if(Meteor.isServer) {
                     dispatcher.resume();
 
                     let currentSong = Queue.findOne({});
-                    Queue.update({currentSong},{$set:{"status": "playing"}});
+                    Queue.update({"_id":currentSong._id},{$set:{"status": "playing"}});
+
+                    console.log("resume");
                 }
             }
         },
@@ -140,6 +148,8 @@ if(Meteor.isServer) {
             if(dispatcher != null) {
                 dispatcher.end();
                 dispatcher = null;
+
+                console.log("skip");
             }
         },
         'pause': function() {
@@ -147,13 +157,17 @@ if(Meteor.isServer) {
                 dispatcher.pause();
 
                 let currentSong = Queue.findOne({});
-                Queue.update(currentSong,{$set:{"status": "pause"}});
+                Queue.update({"_id":currentSong._id},{$set:{"status": "pause"}});
+
+                console.log("pause");
             }
         },
         'stop': function() {
             if(dispatcher != null) {
                 Queue.remove({});
                 dispatcher.end();
+
+                console.log("stop");
             }
         },
         'remove': function(id) {
