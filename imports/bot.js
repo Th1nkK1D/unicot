@@ -4,7 +4,8 @@ import { Queue } from '../imports/queue';
 if(Meteor.isServer) {
     const Discord = require('discord.js');
     const ytdl = require('ytdl-core');
-    let localtunnel = require('localtunnel');
+    let ngrok = require('ngrok');
+
     let Fiber = Npm.require('fibers');
 
     const token = 'MjgwMzY4NzI2NTk0MDI3NTIw.C6wpWw.f-ruHdcIvvv-5STgBUNb4AOvjwo';
@@ -15,7 +16,7 @@ if(Meteor.isServer) {
     voiceChannel = null;
     voiceConnection = null;
     dispatcher = null;
-    tunnel = null;
+    tunnelUrl = null;
 
     // Discord bot preparation
     client.on('ready', () => {
@@ -33,23 +34,22 @@ if(Meteor.isServer) {
                     .then(connection => {
                         voiceConnection = connection;
 
-                        //Create localtunnel
-                        tunnel = localtunnel(3000, function(err, tunnel) {
+                        //Request ngrok
+                        ngrok.connect(3000, function (err, url) {
                             if (err) {
-                                console.log("localtunnel error");
+                                console.log(err);
                             }
 
-                            console.log("localtunnel working: "+tunnel.url);
+                            console.log("I'm running at: "+url);
 
-                            m.reply("I'm here! : "+tunnel.url);
-                        });
+                            m.reply("I'm running at: "+url);
 
-                        tunnel.on('close', function() {
-                            // tunnels are closed
-                            console.log("localtunnel closed");
+                            tunnelUrl = url;
                         });
                     })
                     .catch(console.error);
+            } else if(tunnelUrl != null) {
+                m.reply("I'm already running at: "+tunnelUrl);
             }
         } else if(m.content === '>>bye') {
             if(voiceChannel != null) {
@@ -62,8 +62,11 @@ if(Meteor.isServer) {
                 voiceChannel.leave();
                 voiceChannel = null;
 
-                //Close localtunnel
-                tunnel.close();
+                //Close ngrok
+                ngrok.disconnect();
+                tunnelUrl = null;
+
+                console.log("disconnected");
             }
         }
 
