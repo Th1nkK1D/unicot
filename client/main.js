@@ -43,8 +43,8 @@ angular.module('unicot', [
       Meteor.call('volumeDown');
     }
 
-    $scope.VolumeUp = function() {
-      Meteor.call('VolumeUp');
+    $scope.volumeUp = function() {
+      Meteor.call('volumeUp');
     }
 
     $scope.remove = function(song) {

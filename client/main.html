@@ -18,12 +18,12 @@
                 <div class="column player">
                     <div class="controller">
                         <div ng-hide="queue.playing == null">
-                                <a href="" ng-click="stop()" ng-hide="true"><i class="material-icons">stop</i></a>
+                                <a href="" ng-click="stop()" ng-hide="queue.playing.status == 'queued'"><i class="material-icons">stop</i></a>
                                 <a href="" ng-click="play()" ng-hide="queue.playing.status == 'playing'"><i class="material-icons">play_arrow</i></a>
                                 <a href="" ng-click="pause()" ng-show="queue.playing.status == 'playing'"><i class="material-icons">pause</i></a>
-                                <a href="" ng-click="skip()" ng-hide="true"><i class="material-icons">skip_next</i></a>
+                                <a href="" ng-click="skip()" ng-hide="queue.playing.status == 'queued'"><i class="material-icons">skip_next</i></a>
                                 
-                                <div class="volume" ng-hide="true">
+                                <div class="volume" ng-hide="queue.playing.status == 'queued'">
                                     <a href="" ng-click="volumeDown()"><i class="material-icons">remove</i></a>
                                     <i class="material-icons">volume_up</i>
                                     <a href="" ng-click="volumeUp()"><i class="material-icons">add</i></a>

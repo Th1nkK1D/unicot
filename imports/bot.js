@@ -11,7 +11,7 @@ if(Meteor.isServer) {
     const token = 'MjgwMzY4NzI2NTk0MDI3NTIw.C6wpWw.f-ruHdcIvvv-5STgBUNb4AOvjwo';
     const client = new Discord.Client();
 
-    let streamSetting = { seek: 0, volume: 0.05 };
+    let streamSetting = { seek: 0, volume: 0.08 };
 
     voiceChannel = null;
     voiceConnection = null;
@@ -178,14 +178,18 @@ if(Meteor.isServer) {
         },
         'volumeUp': function() {
             if(dispatcher != null && streamSetting.volume < 2) {
-                streamSetting.volume += 0.1;
+                streamSetting.volume += 0.02;
                 dispatcher.setVolume(streamSetting.volume);
+
+                console.log("volume up");
             }
         },
         'volumeDown': function() {
             if(dispatcher != null && streamSetting.volume > 0) {
-                streamSetting.volume -= 0.1;
+                streamSetting.volume -= 0.02;
                 dispatcher.setVolume(streamSetting.volume);
+
+                console.log("volume down");
             }
         }
     })
