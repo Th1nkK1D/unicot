@@ -1,8 +1,16 @@
 {
   "name": "unicot",
   "version": "1.0.0",
-  "description": "Discord music streamer bot",
-  "main": "bot.js",
+  "description": "Discord music streaming bot with nice looking web user interface",
+  "homepage":"https://github.com/Th1nkK1D/unicot",
+  "repository" : { 
+    "type" : "git",
+    "url" : "https://github.com/Th1nkK1D/unicot"
+  },
+  "bugs": { 
+    "url" : "https://github.com/Th1nkK1D/unicot",
+    "email" : "witheep@gmail.com"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

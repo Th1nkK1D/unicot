@@ -24,8 +24,9 @@ Discord music streaming bot with nice looking web user interface
 ### Powered by
 - [Meteor](https://www.meteor.com)
 - [Discord.js](https://discord.js.org/)
-- [Angular 1](https://angularjs.org)
 - [Node Youtube Downloader](https://github.com/fent/node-ytdl-core)
+- [Angular 1](https://angularjs.org)
+- [Milligram](https://milligram.github.io)
 - [ngrok](https://ngrok.com)
 
 Tasty Code by © Th1nkK1D 2017
