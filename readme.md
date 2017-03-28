@@ -12,7 +12,8 @@ Discord music streaming bot with nice looking web user interface
 2. Download Unicot. You can either use git clone (if you have git) or you can choose "Download Zip" from the green button name "Clone or Download" above. If you download as zip, don't forget to extract it.
 3. Create Discord bot, get a token and add it to your server by following this [guide](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
 4. Inside Unicot directory, replace your token in `/imports/token.js` with any text editor.
-5. Use your Command Line or Terminal to navigate to the Unicot directory and run command: `meteor` to start the Unicot!
+5. Use your Command Line or Terminal to navigate to the Unicot directory and run `meteor npm install` Wait until NPM finish install all neccesary package.
+6. Run command: `meteor` to start the Unicot!
 
 ### How to use
 1. Send the command `>>hi` in your server text channels. Unicot will join the first voice channel it found and reply with the URL which you can access Unicot web interface.
