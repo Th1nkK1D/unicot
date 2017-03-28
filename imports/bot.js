@@ -1,5 +1,7 @@
 import { Meteor } from 'meteor/meteor';
-import { Queue } from '../imports/queue';
+import { Queue } from '../imports/queue.js';
+
+import token from '../imports/token.js';
 
 if(Meteor.isServer) {
     const Discord = require('discord.js');
@@ -8,7 +10,6 @@ if(Meteor.isServer) {
 
     let Fiber = Npm.require('fibers');
 
-    const token = 'MjgwMzY4NzI2NTk0MDI3NTIw.C6wpWw.f-ruHdcIvvv-5STgBUNb4AOvjwo';
     const client = new Discord.Client();
 
     let streamSetting = { seek: 0, volume: 0.08 };
@@ -77,7 +78,7 @@ if(Meteor.isServer) {
     // Reset currentSong playing status  
     let currentSong = Queue.findOne({});
 
-    if(currentSong.status != "queued") {
+    if(typeof currentSong != 'undefined' && currentSong.status != "queued") {
         Queue.update({"_id":currentSong._id},{$set:{"status": "queued"}})
     }
 
