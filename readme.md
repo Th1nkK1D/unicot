@@ -19,7 +19,7 @@ Discord music streaming bot with nice looking web user interface.
 2. To stop, send the command _>>bye_ in your server text channels. Unicot will stop web interface and leave the voice channel.
 
 ### Screenshot
-![Unicot Screenshot](https://lh3.googleusercontent.com/whF-aDB4dumwaFF8p0-p8TPMeDxBMI8H9vxaHrOeqtbt5FN_pK8UaJiaUVbA4xmK_2YK5zsQDiSOqDA=w1273-h749-rw)
+![Unicot Screenshot](https://drive.google.com/uc?id=0ByEaNyGcU8ccX2l3TnpxT3BTUnc)
 
 ### Powered by
 - [Meteor](https://www.meteor.com)
