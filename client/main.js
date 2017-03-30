@@ -13,44 +13,61 @@ import { Queue } from '../imports/queue.js';
 angular.module('unicot', [
   angularMeteor
 ]).controller('mainController',['$scope','$http',function($scope,$http) {
-    //Add song to queue
-    $scope.add = function(url) {      
-      
-      //Fetch Youtube data
-      $http({method: 'JSONP', url: 'https://noembed.com/embed?url='+url+'&format=json'}).
-        then(function(data, status) {
-          //Get video id
-          let vid = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/)[1];
-          let title = data.data.title;
-          $scope.url = null;
+    $scope.urlIsInvalid = false;
 
-          Meteor.call('add',vid,title);
-          });
+    //Add song to queue
+    $scope.add = function(url) {
+      //Get video id
+      let vid = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
+
+      if(vid != null) {
+        //Fetch Youtube data
+        $http({method: 'JSONP', url: 'https://noembed.com/embed?url='+url+'&format=json'}).
+          then(function(data, status) {
+            let title = data.data.title;
+
+            //Add to collection
+            Meteor.call('add',vid[1],title);
+
+            $scope.url = null;
+            $scope.urlIsInvalid = false;
+            });
+      } else {
+        //Invalid video URL
+        $scope.urlIsInvalid = true;
+      }
     }
+
     //Play or resume current song
     $scope.play = function() {
       Meteor.call('play');
     }
+
     //Pause current song
     $scope.pause = function() {
       Meteor.call('pause');
     }
+
     //Skip to next song
     $scope.skip = function() {
       Meteor.call('skip');
     }
+
     //Stop the song, clear queue
     $scope.stop = function() {
       Meteor.call('stop');
     }
+
     //Adjust volume down
     $scope.volumeDown = function() {
       Meteor.call('volumeDown');
     }
+
     //Adjust volume up
     $scope.volumeUp = function() {
       Meteor.call('volumeUp');
     }
+
     //Remove song from queue
     $scope.remove = function(song) {
       Meteor.call('remove',song._id);

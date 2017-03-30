@@ -1,10 +1,12 @@
 <!-- Unicot - Main web page HTML 
-    https://github.com/Th1nkK1D/unicot
-    (c) Th1nk.K1D 2017
--->
+     https://github.com/Th1nkK1D/unicot
+     (c) Th1nk.K1D 2017 -->
 
 <head>
-    <title>Unicot: Discord Music Streaming Bot</title>
+    <title>Unicot - Nice Looking Discord Music Streaming Bot</title>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
     <!-- Google Fonts -->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
@@ -19,29 +21,41 @@
     <div class="container" ng-controller="mainController">
         <div class="main-body">
             <img src="unicot_banner.jpg" alt="Unicot" class="banner">
+            <!-- Paper component -->
             <div class="row paper">
+                <!-- Player column -->
                 <div class="column player">
                     <div class="controller">
+                        <i class="material-icons" ng-show="queue.playing == null">sentiment_very_satisfied</i>
+                        
                         <div ng-hide="queue.playing == null">
-                                <a href="" ng-click="stop()" ng-hide="queue.playing.status == 'queued'"><i class="material-icons">stop</i></a>
-                                <a href="" ng-click="play()" ng-hide="queue.playing.status == 'playing'"><i class="material-icons">play_arrow</i></a>
-                                <a href="" ng-click="pause()" ng-show="queue.playing.status == 'playing'"><i class="material-icons">pause</i></a>
-                                <a href="" ng-click="skip()" ng-hide="queue.playing.status == 'queued'"><i class="material-icons">skip_next</i></a>
+                            <a href="" ng-click="stop()" ng-hide="queue.playing.status == 'queued'"><i class="material-icons">stop</i></a>
+                            <a href="" ng-click="play()" ng-hide="queue.playing.status == 'playing'"><i class="material-icons">play_arrow</i></a>
+                            <a href="" ng-click="pause()" ng-show="queue.playing.status == 'playing'"><i class="material-icons">pause</i></a>
+                            <a href="" ng-click="skip()" ng-hide="queue.playing.status == 'queued'"><i class="material-icons">skip_next</i></a>
                                 
-                                <div class="volume" ng-hide="queue.playing.status == 'queued'">
-                                    <a href="" ng-click="volumeDown()"><i class="material-icons">remove</i></a>
-                                    <i class="material-icons">volume_up</i>
-                                    <a href="" ng-click="volumeUp()"><i class="material-icons">add</i></a>
-                                </div>
+                            <div class="volume" ng-hide="queue.playing.status == 'queued'">
+                                <a href="" ng-click="volumeDown()"><i class="material-icons">remove</i></a>
+                                <i class="material-icons">volume_up</i>
+                                <a href="" ng-click="volumeUp()"><i class="material-icons">add</i></a>
+                            </div>
                         </div>
                     </div>
                     <img class="cover" src="https://img.youtube.com/vi/{{queue.playing.vid}}/hqdefault.jpg" alt="">
-                </div>
+                </div><!-- End of Player column -->
+                <!-- Queue column -->
                 <div class="column">
                     <div class="queue">
+                        <div class="empty" ng-show="queue.playing == null">
+                            Queue is empty
+                            <br>
+                            Let's add some music!
+                        </div>
+
                         <div class="playing">
                             <h4>{{queue.playing.title}}</h4>
                         </div>
+
                         <div class="next-list">
                             <ol>
                                 <li ng-repeat="song in queue.nextList">
@@ -49,16 +63,19 @@
                                 </li>
                             </ol>
                         </div>
+
                         <div class="input">
                             <form ng-submit="add(url)">
-                                <input type="text" placeholder="Paste Youtube link here..." ng-model="url">
-                                <input type="submit" class="submit"/>
+                                <input ng-class="{'invalid': urlIsInvalid }" type="text" placeholder="Paste Youtube link here..." ng-model="url">
+                                <input class="submit" type="submit"/>
                             </form>
                         </div>
                     </div>
-                </div>
+                </div><!-- End of Queue column -->
             </div>
-            <p class="footer">&copy Th1nkK1D 2017 - <a href="https://github.com/Th1nkK1D/unicot ">Unicot Github Page</a></p>
+            <!-- End of Paper component -->
+
+            <p class="footer">Tasty code by &copy Th1nk.K1D 2017 - <a href="https://github.com/Th1nkK1D/unicot ">Unicot Github Page</a></p>
         </div>
     </div>
 </body>
