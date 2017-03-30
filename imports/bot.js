@@ -1,3 +1,8 @@
+/* Unicot - Main bot 
+ * https://github.com/Th1nkK1D/unicot
+ * (c) Th1nk.K1D 2017
+ */
+
 import { Meteor } from 'meteor/meteor';
 import { Queue } from '../imports/queue.js';
 
@@ -7,13 +12,14 @@ if(Meteor.isServer) {
     const Discord = require('discord.js');
     const ytdl = require('ytdl-core');
     let ngrok = require('ngrok');
-
     let Fiber = Npm.require('fibers');
 
     const client = new Discord.Client();
 
-    let streamSetting = { seek: 0, volume: 0.08 };
+    //Default stream setting
+    let streamSetting = { seek: 0, volume: 0.1 };
 
+    //Init global variable
     voiceChannel = null;
     voiceConnection = null;
     dispatcher = null;
@@ -21,7 +27,7 @@ if(Meteor.isServer) {
 
     // Discord bot preparation
     client.on('ready', () => {
-        console.log('Unicot is running!');
+        console.log('Unicot is ready!');
     });
 
     client.on('message', m => {
@@ -41,7 +47,7 @@ if(Meteor.isServer) {
                                 console.log(err);
                             }
 
-                            console.log("I'm running at: "+url);
+                            console.log("Unicot web interface is running at: "+url);
 
                             m.reply("I'm running at: "+url);
 
@@ -54,9 +60,10 @@ if(Meteor.isServer) {
             }
         } else if(m.content === '>>bye') {
             if(voiceChannel != null) {
-
+                //Clear dispatcher
                 if(dispatcher != null) {
                     dispatcher.end();
+                    dispatcher = null;
                 }
 
                 //Leave voiceChannel
@@ -68,14 +75,17 @@ if(Meteor.isServer) {
                 tunnelUrl = null;
 
                 console.log("disconnected");
+            } else {
+                m.reply("You didn't say '>>hi' to me yet, aren't you?");
             }
         }
 
     });
 
+    //Start the bot
     client.login(token);
 
-    // Reset currentSong playing status  
+    //Reset currentSong playing status  
     let currentSong = Queue.findOne({});
 
     if(typeof currentSong != 'undefined' && currentSong.status != "queued") {
@@ -94,7 +104,6 @@ if(Meteor.isServer) {
             //Remove from queue
             dispatcher = null;
             Queue.remove({"_id": currentSong._id});
-            //console.log("Song removed");
 
             currentSong = Queue.findOne({});
         }
@@ -105,15 +114,15 @@ if(Meteor.isServer) {
         if(dispatcher == null) {
             let fiber = Fiber.current;
 
-            //stream song
+            //Stream song
             let stream = ytdl('https://www.youtube.com/watch?v='+vid, {filter : 'audioonly'});
             dispatcher = voiceConnection.playStream(stream,streamSetting);
 
             console.log("playing "+vid);
 
+            //Triggered when current stream ended
             dispatcher.on('end',function(currentSong) {
                 if(dispatcher != null) {
-                    //console.log("Stream ended");
                     fiber.run();
                 }
             });
@@ -124,6 +133,7 @@ if(Meteor.isServer) {
 
     // Meteor Methods called from front-end
     Meteor.methods({
+        //Add new song
         'add': function(vid,title) {
             Queue.insert({
                 "vid": vid,
@@ -132,6 +142,7 @@ if(Meteor.isServer) {
                 "date": new Date()
             });
         },
+        //Play or resume
         'play': function() {
             if(voiceConnection != null) {
                 if(dispatcher == null) {
@@ -148,6 +159,7 @@ if(Meteor.isServer) {
                 }
             }
         },
+        //Skip current song
         'skip': function() {
             if(dispatcher != null) {
                 dispatcher.end();
@@ -156,6 +168,7 @@ if(Meteor.isServer) {
                 console.log("skip");
             }
         },
+        //Pause current song
         'pause': function() {
             if(dispatcher != null) {
                 dispatcher.pause();
@@ -166,6 +179,7 @@ if(Meteor.isServer) {
                 console.log("pause");
             }
         },
+        //Stop music, clear queue
         'stop': function() {
             if(dispatcher != null) {
                 Queue.remove({});
@@ -174,9 +188,11 @@ if(Meteor.isServer) {
                 console.log("stop");
             }
         },
+        //Remove song from queue
         'remove': function(id) {
             Queue.remove({"_id": id});
         },
+        //Adjust volume up
         'volumeUp': function() {
             if(dispatcher != null && streamSetting.volume < 2) {
                 streamSetting.volume += 0.02;
@@ -185,6 +201,7 @@ if(Meteor.isServer) {
                 console.log("volume up");
             }
         },
+        //Adjust volume down
         'volumeDown': function() {
             if(dispatcher != null && streamSetting.volume > 0) {
                 streamSetting.volume -= 0.02;
