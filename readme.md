@@ -7,7 +7,7 @@ Discord music streaming bot with nice looking web user interface
 - Stream any music from Youtube to your Discord voice channel
 - Manage queue and control the music from web interface
 
-**NOTE**: Unicot is my experimental project. Bugs and stability is expected. If web interface isn't response, refreshing the page mostly fix the problem. Feel free to report any bugs and use my code for non-profit purpose :)
+**NOTE**: Unicot is my experimental project. Bugs and instability is expected. If web interface isn't response, refreshing the page will mostly fix the problem. Feel free to report any bugs and use my code for non-profit purpose :)
 
 ### Set Up
 1. Install [Meteor](https://www.meteor.com/install) and [ffmpeg](https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg).
@@ -33,5 +33,7 @@ Discord music streaming bot with nice looking web user interface
 - [Milligram](https://milligram.github.io)
 - [Google Material Icons](https://material.io/icons/) + [Roboto Font](https://fonts.google.com/specimen/Roboto)
 - [ngrok](https://ngrok.com)
+
+![How Unicot work](https://drive.google.com/uc?id=0ByEaNyGcU8ccZG9oX2YtTk1nYzg)
 
 Tasty Code by © Th1nk.K1D 2017
